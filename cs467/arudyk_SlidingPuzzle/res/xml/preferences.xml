@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Sliding puzzle settings" 
+        android:summary="General settings" 
+        android:key="preference" 
+        android:enabled="true" >
+        
+    <ListPreference 
+        android:title="Grid color" 
+        android:enabled="true"
+        android:summary="changes grid color" 
+        android:key="grid_color"
+        android:entries="@array/colors"
+        android:entryValues="@array/colors" 
+        android:defaultValue="white"/>
+    
+    <CheckBoxPreference
+        android:title="Grid numbers"
+        android:enabled="true"
+        android:key="numbers_on"
+        android:summaryOn="Numbers enabled"
+        android:summaryOff="Numbers disabled"
+        android:defaultValue="false"/>
+    
+    </PreferenceCategory>
+
+</PreferenceScreen>

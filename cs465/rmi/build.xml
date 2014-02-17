@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="RMI" default="compile" basedir=".">
+
+
+    <property file="${user.home}/build.properties" />
+    <property file="default.properties" />
+
+    <path id="classpath">
+        <pathelement location="${classes.home}" />
+    </path>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="compile"
+        description="Compile all Java Source Files">
+
+        <mkdir dir="${classes.home}" />
+        <javac      srcdir="${src.home}"
+            destdir="${classes.home}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+            optimize="${compile.optimize}" 
+            includeantruntime="false" >
+
+            <classpath refid="classpath" />
+
+            <compilerarg value="-Xlint:all" />
+            <compilerarg value="-Xlint:-path" />
+            <compilerarg value="-Xlint:-serial" />
+        </javac>
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="doc"
+        description="Create the documentation">
+        <javadoc packagenames="src" sourcepath="${src.home}" destdir="${docs.home}">
+            <classpath refid="classpath" />
+            <fileset dir="${src.home}">
+                <include name="**" />
+            </fileset>
+        </javadoc>
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="runserver"
+                 depends="compile"
+             description="runs the server file">
+             <java  failonerror="true" 
+                 classname="edu.wcu.cs.cs465.driver.MultiuserChatServerDriver"
+                 fork="true">
+                 <arg line="${args}"/>
+
+                 <classpath refid="classpath" />
+             </java>
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="runclient"
+                 depends="compile"
+             description="runs the client file">
+             <java  failonerror="true" 
+                 classname="edu.wcu.cs.cs465.driver.MultiuserChatClientDriver"
+                 fork="true">
+                 <arg line="${args}"/>
+
+                 <classpath refid="classpath" />
+             </java>
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="dist"
+        depends="compile"
+        description="Creates an executable jar file">
+        <jar 
+            destfile="${dist.home}/${app.name}.jar" 
+            basedir="${classes.home}">
+            <manifest>
+                <attribute 
+                    name="Main-Class" 
+                value="edu.wcu.cs.cs351.driver.Driver" />
+            </manifest>
+        </jar>
+        <java fork="true" jar="${dist.home}/${app.name}.jar" />
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target         name="clean"
+        description="Delete classes, doc, and dist directories">
+        <delete dir="${classes.home}" />
+        <delete dir="${docs.home}" />
+        <delete dir="${dist.home}" />
+    </target>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --> 
+    <target name="input-args" 
+        description="Prompts for arguments to pass">
+        <input addProperty="args" message="Enter command line args:"/>
+    </target>
+
+</project>

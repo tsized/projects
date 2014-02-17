@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="size_prompt">Choose a size</string>
+    <string-array name="size_array">
+        <item>3x3</item>
+        <item>4x4</item>
+        <item>5x5</item>
+    </string-array>
+    
+    <string-array name="colors">
+        <item >black</item>
+        <item >white</item>
+        <item >blue</item>
+        <item >red</item>
+        <item >green</item>
+        <item >magenta</item>
+        <item >yellow</item> 
+    </string-array>
+</resources>

@@ -1,0 +1,18 @@
+\begin{thebibliography}{1}
+
+\bibitem{Ecology}
+Benjamin Smith and Beverly Collins.
+\newblock {\em Mathematical Models of Demography in Ecology}.
+\newblock Mathematical Biology. Elsevier, 2010.
+
+\bibitem{Monday}
+Moe Stooge, Larry Stooge, Curly Stooge, and Bob Smith.
+\newblock The woes of mondays in the {U}kraine.
+\newblock {\em Cold Humor}, 29(4), 1958.
+
+\bibitem{website}
+Western~Carolina University.
+\newblock Webpage title would go here.
+\newblock \url{http://wcu.edu}.
+
+\end{thebibliography}

@@ -1,4 +1,4 @@
 projects
 ========
 
-Most of my school projects
+Some of my school projects

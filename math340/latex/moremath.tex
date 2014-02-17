@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{hyperref}
+
+\def\Z\{mathbb{Z}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proof}{Proof}
+
+\begin{document}
+
+\begin{center}
+More Math in \LaTeX{} \\
+Monday, January 27, 2014
+\end{center}
+
+\begin{theorem}
+Let G be an abelian group and let $$c^n = c*c*c*...*c \mbox{ for $n$ factors $c$} $$, 
+where $c \in G$ and $n \in Z^+$ (positive integers). Give a mathematical 
+induction proof that 
+\begin{eqnarray}
+(a*b)^n = (a^n)*(b^n) \forall a,b \in G
+\end{eqnarray}
+\end{theorem}
+
+New example from the Practice.pdf on BlackBoard
+% * on eqnarray gives no numbers
+\begin{eqnarray*}
+\frac{dx_1}{dt} & = & x_1 - 2x_2 \\
+\frac{dx_1}{dt} & = & 5x_1 - x_2
+\end{eqnarray*}
+More words here
+%\begin{eqnarray*}
+%    \det(A - \lambda I) & = & 
+%    \det 
+%    \left( \left[ 
+%    \begin{array}{cc}
+%    (1 - \lambda I) & -2 \\
+%    5 & (-1 - \lambda)
+%    \end{array}
+%    \right] \right) \\
+%    & = & (1 - \lambda) (-1 - \lambda) + 10 \\
+%    & = & \lambda^2 + 9 \\
+%    \mbox{ so, } \lambda $ = $ \pm 3 i
+%\end{eqnarray}
+
+\end{document}

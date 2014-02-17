@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Phun Slide</string>
+    
+    <string name="choose_size">Choose a size</string>
+    <string name="randomize">Randomize puzzle</string>
+    <string name="preferences">Preferences</string>
+
+</resources>

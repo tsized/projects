@@ -1,0 +1,60 @@
+\documentclass{article}
+%Preamble
+\usepackage[margin=.75in]{geometry}
+
+\newtheorem{definition}{Definition}
+
+\begin{document}
+
+Let's put something in bold. Here it is: \textbf{BOLD}
+
+Now something in italics. Here it is: \textit{ITALICS}
+
+We can underline words. \underline{Let's underline an entire sentence.}
+
+To force \LaTeX{} to do a carriage return we use double backslash.\\
+Here's a \\ short \\sentence. \\ \\ \\ Note I had three blank lines above.
+
+\begin{center}
+\textbf{Here is the man idea.\\ It's important!}
+\end{center}
+
+We can create a bulleted list using the itemize environment.
+\begin{itemize}
+\item Monday
+    \begin{enumerate}
+    \item Math 340
+    \item Math 256
+    \end{enumerate}
+\item Tuesday
+\item Wednesday
+    \begin{enumerate}
+    \item Math 340
+    \item Math 256
+    \end{enumerate}
+\item Thursday
+\item Friday
+    \begin{enumerate}
+    \item Math 340
+    \item Math 256
+    \end{enumerate}
+\item Saturday
+\item Sunday
+\end{itemize}
+
+We can create a numbered list using enumerate.
+\begin{enumerate}
+\item Monday
+\item Tuesday
+\item Wednesday
+\item Thursday
+\item Friday
+\item Saturday
+\item Sunday
+\end{enumerate}
+
+\begin{definition}[Frog]
+Little green creature with four legs and a croak.
+\end{definition}
+
+\end{document}

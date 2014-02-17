@@ -1,0 +1,384 @@
+#!/usr/bin/python
+
+import sys
+
+##
+# Simulates a cache filling memory by deciphing the address.
+#
+# usage: ./CacheSimular < file.dat
+#        output stored in output.txt
+#
+# @author Tim Sizemore
+# @author Bill Franklin
+# @version 3, May 2013
+##
+
+# Outfile for the program.
+statFile = open('output.txt','w')
+
+# Set number of the cache.
+numSet   = 0 
+
+# Set size of the cache.
+setSize  = 0 
+
+# Line size of the cache.
+lineSize = 0 
+
+# Hit reference for the cache.
+hits     = 0
+
+# Miss reference for the cache.
+miss     = 0
+
+# Read value for cache.
+access   = 0
+
+# Write value for cache.
+accesses = -3
+
+# Offset of the cache.
+offset   = 0 
+
+# Index into the block of data.
+index    = 0
+
+# Data reference used during a read.
+tag      = 0
+
+# Holds the data references
+array    = []
+
+# Holds the cache memory references
+cache    = []
+
+##
+# A class that holds the number of times memory is referenced in the simulation.
+##
+class MemBlock:
+    
+    # 
+    # A function that sets the values to their respective fields when read from
+    # the file.
+    #
+    # self    - python's self reference
+    # access  - read or write
+    # size    - the size of the set
+    # address - the address of the memory location
+    # tag     - calculated from the address
+    # index   - calculated from the address
+    # offset  - calculated from the address
+    # result  - hit or miss
+    # memref  - times memory was accessed
+    # 
+    def __init__(self, access, size, address, tag, index, offset, result, 
+                 memref):
+
+        byteArray = []
+        self.access  = access
+        self.size    = size
+        self.address = address
+        self.tag     = tag 
+        self.offset  = offset
+        self.index   = index
+        self.result  = 0
+        self.memref  = 0
+
+    #
+    # A function that sets the number of times memory was referenced and sets
+    # the result to hit.
+    #
+    # self - self reference
+    def hit(self):
+        self.memref = 0
+        self.result = 'hit'
+
+    #
+    # A function that sets the memref value to one and the result to a miss.
+    #
+    # self - self reference
+    #
+    def miss(self):
+        self.memref = 1 
+        self.result = 'miss'
+
+    #
+    # A function that adds one to the memref value and sets result to miss
+    #
+    # self - self reference
+    #
+    def dirtyBit(self):
+       self.memref += 1
+       self.result = 'miss'
+
+    #
+    # A function that prints out the values of each variable.
+    #
+    # self - self reference
+    #
+    def toString(self):
+        return (str(self.access)  + " " + 
+                str(self.address) + " " + 
+                str(self.tag)     + " " + 
+                str(self.index)   + " " + 
+                str(self.offset)  + " " + 
+                str(self.result)  + " " + 
+                str(self.memref)) 
+
+#
+# Calculates the bit values for the offset, index, and tag
+# 
+# num    - the number of bits to read 
+# return - the bit size
+# 
+def computeBit(num):
+    num = int(num)
+    bit = 0
+
+    while(pow(2, bit) != num):
+        bit += 1
+    return bit
+
+#
+# A function that returns the length of a number.
+#
+# num    - the string num
+# return - length
+#
+def length(num):
+    return len(str(num))
+
+#
+# Initializes the values for offset index and tag.
+#
+# binary    - binary number to be taken apart
+# offsetAmt - offset amount
+# indexAmt  - index amount
+# 
+def initValue(binary, offsetAmt, indexAmt):
+    global offset
+    global index
+    global tag
+    
+    if (length(binary) < offsetAmt):
+        offset = binary[0 : length(binary)] 
+        index  = 0
+        tag    = 0
+    elif (length(binary) < offsetAmt + indexAmt):
+        offset = binary[length(binary) - offsetAmt : length(binary)]
+        index  = binary[0 : length(binary) - offsetAmt]
+        tag = 0
+    else:
+        offset = binary[length(binary) - offsetAmt : length(binary)]
+        index  = binary[length(binary) - offsetAmt-indexAmt : 
+                        length(binary) - offsetAmt]
+        tag    = binary[0 : length(binary) - offsetAmt - indexAmt] 
+
+    offset = str(binTodec(offset))
+    index  = str(binTodec(index))
+    tag    = str(binTodec(tag))
+
+#
+# A function to compute the hit ratio. 
+#
+# return - result
+#
+def computeHitRatio():
+    global hits
+    global accesses
+    result = 0
+    result = float(hits) / accesses
+    return  "%0.6f" % result
+
+#
+# A function to compute the miss ratio. 
+#
+# return - result
+#
+def computeMissRatio():
+    global miss
+    global accesses
+    result = 0
+    result = float(miss) / accesses
+    return  "%0.6f" % result
+
+#
+# Check to see if a given memory block exist in the cache.
+#
+# array    - The array to check 
+# MemBlock - MemBlock to look for
+# return   - true if it exists
+#
+def exist(array, MemBlock):
+    boolean = False
+    for memblock in array:
+        if (memblock.index == MemBlock.index and 
+            memblock.tag == MemBlock.tag):
+            boolean = True
+    return boolean
+
+#
+# A function that converts a hexidecimal into binary.
+#
+# hexi   - hexidecimal to be converted
+# return - binary number
+#
+def hexTobin(hexi):
+    word  = "0x" + str(hexi)
+    num = bin(int(word, 16))
+    num  = num.split('b')[1]
+    return num 
+
+#
+# Compares two memory blocks and return true if equal.
+#
+# MemBlock1 - A memory block to compare
+# MemBlock2 - Memory block to compare
+# return    - true if the blocks are the same
+#
+def compare(MemBlock1, MemBlock2):
+    boolean = False
+    if (MemBlock1.index == MemBlock2.index
+        and MemBlock1.tag == MemBlock2.tag):
+        boolean = True
+    return boolean
+
+#
+# A function to convert a binary number into a decimal.
+#
+# binary - binary to be converted
+# return - decimal representation
+#
+def binTodec(binary):
+    if(binary == ''):
+        binary = 0
+    num = int(str(binary), 2)
+    return num
+
+#
+# Adds a memblock to the cache.
+#
+# array    -  array used for storing
+# MemBlock -  Memblock to add
+# setSize  -  Size of set of memory
+#
+def addToCache(array, MemBlock, setSize):
+    global cache
+    size = 0 
+    holder = []
+    i = None
+
+    for memblock in array:
+        if (compare(memblock, MemBlock)):
+            MemBlock.hit()
+
+        if (memblock.index == MemBlock.index):
+            i = array.index(memblock)
+            holder.append(i)
+            size += 1
+           
+        if (int(size) == int(setSize)):
+
+            if (MemBlock.access is 'write'
+                and array[holder[0]].result is 'hit' 
+                and not MemBlock.result is 'hit'):
+                MemBlock.dirtyBit()
+
+            array.pop(holder[0])
+
+    array.append(MemBlock)
+    cache.append(MemBlock)
+
+#
+# Check the Memblock appropriately before appending to list.
+#
+# MemBlock - Memblock to check
+#
+def checkBlock(MemBlock):
+    global array
+    global setSize
+    global miss
+    global hits
+    global cache
+
+    boolean = False
+    size = 0
+    nPlace = 0
+
+    if(len(array) == 0):
+        MemBlock.miss()
+        array.append(MemBlock)
+        cache.append(MemBlock)
+        miss += 1
+    else:
+        if(exist(array, MemBlock)): 
+            addToCache(array, MemBlock, setSize)
+            hits += 1
+
+        else: 
+            MemBlock.miss()
+            addToCache(array, MemBlock, setSize)
+            miss += 1
+
+#
+# A function that does formatted printing and write results to a file.
+#
+def formatPrint():
+    global array
+    statFile.write("Cache Configuration\n\n\t"+ numSet + " " + setSize +
+                   "-way set associative entries\n\tof line size " + lineSize +
+                   " bytes\n\n\nResults for Each Reference\n\n")
+     
+    statFile.write("Access Address    Tag   Index Offset Result Memrefs\n")
+    statFile.write("------ -------- ------- ----- ------ ------ -------\n")
+    for i in cache:
+        print >> statFile, "%6s %8s %7s %5s %6s %6s %7s" % (
+                 i.access, i.address, i.tag, i.index, i.offset, 
+                 i.result, i.memref) 
+
+    statFile.write("\nSimulation Summary Statistics\n"  +
+                    "-----------------------------\n" +
+                    "Total hits       : " + str(hits)   + "\n" +
+                    "Total misses     : " + str(miss)   + "\n" +
+                    "Total accesses   : " + str(accesses) + "\n" +
+                    "Hit ratio        : " + str(computeHitRatio())  + "\n" +
+                    "Miss ratio       : " + str(computeMissRatio())  + "\n")
+
+#
+# This for loop acts as main completing the bulk of the programs flow of 
+# control.
+#
+count = 0
+for line in sys.stdin:
+    if (count == 0):
+        numSet = line.strip(' \n').split(':')[1].strip(' ')
+
+    if (count == 1):
+        setSize = line.strip(' \n').split(':')[1].strip(' ')
+
+    if (count == 2):
+        lineSize = line.strip(' \n').split(':')[1].strip(' ')
+
+    count += 1
+
+    if (count > 3):
+        access  = line.strip(' \n').split(':')[0].strip(' ')
+        size    = line.strip(' \n').split(':')[1].strip(' ')
+        address = line.strip(' \n').split(':')[2].strip(' ')
+        if (access is "R"):
+            access = "read"
+        if (access is "W"):
+            access = "write"
+
+        initValue(hexTobin(address), 
+                computeBit(lineSize), 
+                computeBit(numSet))
+
+        x = MemBlock(access, size, address, tag, index, offset, 0, 0)
+        checkBlock(x)
+
+    accesses += 1 
+#
+# Print to file.
+#
+formatPrint()

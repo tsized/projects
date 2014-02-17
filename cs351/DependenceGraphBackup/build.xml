@@ -1,0 +1,95 @@
+<!-- This is a BoundedList project?  I thought that it was a BoundedQueue? -->
+<project name="BoundedList" default="compile" basedir=".">
+    <property file="${user.home}/build.properties"/>
+    <property file="default.properties"/>
+
+    <path id="project.classpath">
+        <!-- We need our classes... -->
+        <pathelement location="${classes.dir}"/>
+
+        <!-- ... and all of the third-party compile in our jar files -->
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+    <target        name="compile"
+            description="Builds application ready to run locally">
+        <mkdir dir="${classes.dir}"/>
+
+        <javac
+               includeantruntime="false"
+                          srcdir="${src.dir}"
+                         destdir="${classes.dir}"
+                           debug="${compile.debug}"
+                     deprecation="${compile.deprecation}"
+                        optimize="${compile.optimize}">
+
+            <classpath refid="project.classpath"/>
+
+            <compilerarg value="-Xlint:all"/>
+            <compilerarg value="-Xlint:-path"/>
+        </javac>
+    </target>
+
+
+    <target        name="test"
+                depends="compile"
+            description="Run JUnit Test Cases">
+
+        <junit printSummary="no" haltonfailure="yes">
+            <classpath refid="project.classpath"/>
+
+            <formatter type="plain" usefile="false"/>
+
+            <batchtest fork="yes">
+                <fileset dir="${src.dir}">
+                    <include name="**/*Test*.java"/>
+                    <exclude name="**/*Abstract*Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target        name="run"                                                   
+            description="Run the program"                                       
+                depends="compile">                                              
+                                                                                
+        <java classname="${main.class}" fork="yes">                             
+            <classpath refid="project.classpath"/>                              
+            <!-- <arg value="input.txt"/> -->
+            <arg value="${input.file}"/>
+        </java>                                                                 
+    </target>                                                                   
+
+    <target        name="doc"
+                depends="compile"
+            description="Creates a Javadoc API document">
+
+         <javadoc
+             sourcepath="${src.dir}"
+                destdir="${docs.dir}"
+                 author="${docs.show.author}"
+                version="${docs.show.version}"
+                    use="true"> <!-- ARD: Add a property for this? -->
+             <classpath refid="project.classpath"/>
+
+
+             <fileset dir="${src.dir}">
+                <include name="**/*.java"/>
+                <!-- ARD: You have something like that in your src.dir? -->
+                <exclude name="org/test/**/*.java"/>
+             </fileset>
+          </javadoc>
+      </target>
+
+
+    
+    <target        name="clean"
+            description="Delete old build and doc directories">
+        <delete dir="${classes.dir}"/>
+        <delete dir="${docs.dir}"/>
+    </target>
+
+</project>

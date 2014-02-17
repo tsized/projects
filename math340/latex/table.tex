@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage{multirow}
+
+\begin{document}
+\title{Friday January 17, 2014}
+\author{Tim Sizemore}
+
+\maketitle
+Today we will talk about tables and maybe even pictures. What fun!
+
+Here's Dr. McNelis' schedule:
+
+
+\begin{tabular}{ccccc}
+Monday        & Tuesday & Wednesday     & Thursday & Friday \\
+Math 340      &         & Math 340 7    &          & Math 340 \\
+10:10 - 11:00 &         & 10:10 - 11:00 &          & 10:10 - 11:00 \\
+Math 255      &         & Math 255      &          & Math 255 \\
+11:15 - 12:05 &         & 11:15 - 12:05 &          & 11:15 - 12:05 \\
+\end{tabular}
+adding lines \\
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+Monday        & Tuesday & Wednesday     & Thursday & Friday \\
+\hline
+Math 340      &         & Math 340 7    &          & Math 340 \\
+10:10 - 11:00 &         & 10:10 - 11:00 &          & 10:10 - 11:00 \\
+\hline
+Math 255      &         & Math 255      &          & Math 255 \\
+11:15 - 12:05 &         & 11:15 - 12:05 &          & 11:15 - 12:05 \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+Monday        & Tuesday & Wednesday     & Thursday & Friday \\
+\hline
+Math 340      &         & Math 340 7    &          & Math 340 \\
+10:10 - 11:00 &         & 10:10 - 11:00 &          & 10:10 - 11:00 \\
+\cline{1-1} \cline{3-5}
+Math 255      &         & Math 255      &          & Math 255 \\
+11:15 - 12:05 &         & 11:15 - 12:05 &          & 11:15 - 12:05 \\
+\end{tabular}
+\end{center}
+
+Recreating the table on p.36 of the text: \\
+
+\begin{tabular}{|c|c|c|c|}
+\cline{3-4}
+\multicolumn{2}{c}{} & \multicolumn{2}{|c|}{Treatment} \\
+\cline{3-4}
+\multicolumn{2}{c|}{} & Medication & Placebo \\
+\hline
+\multirow{2}{.85in}{Better sleep?} & Yes & 36 & 17 \\
+\cline{2-4}
+& No & 21 & 24 \\
+\hline
+\end{tabular}
+
+
+\end{document}

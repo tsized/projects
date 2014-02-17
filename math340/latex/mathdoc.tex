@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+
+\begin{document}
+
+% Defining our own shortcuts.
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+\def\Q{\mathbb{Q}}
+\def\ul{\underline}
+
+\section{Our First Mathematics}
+
+\subsection{Cool Number Set Symbols}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+Name of Set & Symbol & what We Typed \\
+\hline
+Real Numbers & $\R$ & \verb1 $\R$ 1 \\
+\hline
+Complex Numbers & $\C$ & \verb1 $\C$ 1 \\
+\hline
+Integer Numbers & $\Z$ & \verb1 $\Z$ 1 \\
+\hline
+Rational Numbers & $\Q$ & \verb1 $\Q$ 1 \\
+\hline
+\end{tabular}
+\caption{Showing off what we learned today.}
+\end{center}
+\end{table}
+
+\subsection*{Our First Centered Set of Equations}
+
+\begin{eqnarray}
+\frac{d}{dx}[\sqrt{\sin^3(2\theta - 4)}]
+    & = & \frac{d}{dx}[\sqrt{(\sin^3(2\theta - 4))^{1/2}}] \\
+    $ = $ \frac{1}{2}(\sin^3(2\theta - 4)^{1/2}) \frac{d}{dx}[\sin^3(2\theta - 4)] \\
+    $ = $ \frac{1}{2}(\sin^3(2\theta - 4)^{1/2}) *3(\sin^2(2\theta - 4))*\cos(2\theta - 4)*2 \\
+
+\end{eqnarray}
+
+\end{document}
